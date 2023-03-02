@@ -32,9 +32,32 @@ resource "google_compute_instance" "server_main" {
 
 resource "google_compute_instance" "vm_instance" {
   count          = 1
-  name           = "thomas-instance-${count.index}"
+  name           = "thomas-brasil-${count.index}"
   machine_type   = "n1-standard-1"
   zone           = "southamerica-east1-b"
+  tags           = ["allow-udp"]
+  enable_display = true
+  boot_disk {
+    initialize_params {
+      image = "windows-cloud/windows-2022"
+      type = "pd-standard"
+      size = 50
+    }
+  }
+
+  network_interface {
+    network    = "thomas-network" # funciona se tirar mas tudo bem
+    subnetwork = google_compute_subnetwork.google_subnets[count.index].name
+    access_config {
+
+    }
+  }
+}
+resource "google_compute_instance" "vm_instance_usa" {
+  count          = 1
+  name           = "thomas-usa-${count.index}"
+  machine_type   = "n1-standard-1"
+  zone           = "us-east1-b"
   tags           = ["allow-udp"]
   enable_display = true
   boot_disk {
