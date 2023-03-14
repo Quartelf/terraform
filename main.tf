@@ -11,7 +11,7 @@ provider "google" {
   region  = var.region
 }
 
-resource "google_compute_instance" "server_main" {
+resource "google_compute_instance" "server_main_usa" {
   count          = 1
   name           = "server-thomas"
   machine_type   = "n1-standard-1"
@@ -30,7 +30,7 @@ resource "google_compute_instance" "server_main" {
   }
 }
 
-resource "google_compute_instance" "vm_instance" {
+resource "google_compute_instance" "vm_instance_br" {
   count          = 1
   name           = "thomas-brasil-${count.index}"
   machine_type   = "n1-standard-1"
