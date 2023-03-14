@@ -19,20 +19,19 @@ resource "google_compute_instance" "server_main_usa" {
   tags           = ["allow-udp"]
   enable_display = true
   boot_disk {
-    source = "projects/${var.project}/zones/${var.region}-b/disks/thomas-disco-servidor-ad"
+    source      = "projects/${var.project}/zones/${var.region}-b/disks/thomas-disco-servidor-ad"
     auto_delete = false
   }
   network_interface {
     subnetwork = google_compute_subnetwork.google_subnets[count.index].name
     access_config {
-
     }
   }
 }
 
 resource "google_compute_instance" "vm_instance_br" {
-  count          = 1
-  name           = "thomas-brasil-${count.index}"
+  count          = 0
+  name           = "filserver-brasil-${count.index}"
   machine_type   = "n1-standard-1"
   zone           = "southamerica-east1-b"
   tags           = ["allow-udp"]
@@ -40,8 +39,8 @@ resource "google_compute_instance" "vm_instance_br" {
   boot_disk {
     initialize_params {
       image = "windows-cloud/windows-2022"
-      type = "pd-standard"
-      size = 50
+      type  = "pd-standard"
+      size  = 50
     }
   }
 
@@ -55,21 +54,17 @@ resource "google_compute_instance" "vm_instance_br" {
 }
 resource "google_compute_instance" "vm_instance_usa" {
   count          = 1
-  name           = "thomas-usa-${count.index}"
+  name           = "fileserve-usa-${count.index}"
   machine_type   = "n1-standard-1"
   zone           = "us-east1-b"
   tags           = ["allow-udp"]
   enable_display = true
-  boot_disk {
-    initialize_params {
-      image = "windows-cloud/windows-2022"
-      type = "pd-standard"
-      size = 50
+    boot_disk {
+      source      = "projects/${var.project}/zones/${var.region}-b/disks/thomas-disco-servidor-ad"
+      auto_delete = false
     }
-  }
 
   network_interface {
-    network    = "thomas-network" # funciona se tirar mas tudo bem
     subnetwork = google_compute_subnetwork.google_subnets[count.index].name
     access_config {
 
